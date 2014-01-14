@@ -8,4 +8,6 @@ public interface SharedConstants {
     public static final int PLAYER_1 = 1;
     public static final int PLAYER_2 = 2;
     public static final int NO_OUTCOME = 3;
+    public static final int HUMAN = 0;
+    public static final int COMPUTER = 1;
 }
