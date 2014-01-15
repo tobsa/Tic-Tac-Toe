@@ -9,14 +9,16 @@ public class GameGrid implements SharedConstants {
     private int grid[] = new int[GRID_SIZE * GRID_SIZE];
     private List<IGGListener> listeners = new ArrayList();
     
-    public void setMark(int index, int id) {
-        if(index < 0 || index >= grid.length)
-            return;
-        
+    public boolean setMark(int index, int id) {
+        if(index < 0 || index >= grid.length || grid[index] != PLAYER_EMPTY)
+            return false;
+                
         for(IGGListener listener : listeners)
             listener.updateMove(index, id);
         
         grid[index] = id;
+        
+        return true;
     }
     
     @Override

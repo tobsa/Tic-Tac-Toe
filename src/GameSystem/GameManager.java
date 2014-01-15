@@ -101,22 +101,25 @@ public class GameManager implements SharedConstants, Runnable {
     }
     
     private boolean makeMove(Player player, int winner) throws InterruptedException, IOException {        
-        for(IGMListener listener : listeners)
-            listener.updateTurn(player.getName());
-        
-        BlockQueue.getInstance().clear();
-        
-        gameGrid.setMark(player.computeMove(), player.getID());
-        
-        int result = gameGrid.getResult();        
-        if(result == winner || result == RESULT_DRAW) {
+        while(true) {
             for(IGMListener listener : listeners)
-                listener.updateWinner(result, player1.getName(), player2.getName());
+                listener.updateTurn(player.getName());
+
+            BlockQueue.getInstance().clear();
+
+            if(!gameGrid.setMark(player.computeMove(), player.getID()))
+                continue;
+
+            int result = gameGrid.getResult();        
+            if(result == winner || result == RESULT_DRAW) {
+                for(IGMListener listener : listeners)
+                    listener.updateWinner(result, player1.getName(), player2.getName());
+
+                return true;
+            }
             
-            return true;
+            return false;
         }
-        
-        return false;
     }
 
     @Override
