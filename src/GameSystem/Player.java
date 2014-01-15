@@ -1,5 +1,7 @@
 package GameSystem;
 
+import java.io.IOException;
+
 public abstract class Player {
     private int id;
     private String name;
@@ -17,5 +19,5 @@ public abstract class Player {
         return name;
     }
     
-    public abstract int computeMove() throws InterruptedException;
+    public abstract int computeMove() throws InterruptedException, IOException;
 }

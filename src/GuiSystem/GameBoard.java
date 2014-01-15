@@ -30,13 +30,13 @@ public class GameBoard extends JPanel implements SharedConstants, IGGListener {
     @Override
     public void updateMove(int index, int id) {
         switch(id) {
-            case BOARD_EMPTY:
+            case PLAYER_EMPTY:
                 grid[index].setIcon(emptyIcon);
                 break;
-            case BOARD_PLAYER_1:
+            case PLAYER_1:
                 grid[index].setIcon(crossIcon);
                 break;
-            case BOARD_PLAYER_2:
+            case PLAYER_2:
                 grid[index].setIcon(circleIcon);
                 break;
         }

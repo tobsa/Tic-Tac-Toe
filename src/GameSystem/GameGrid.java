@@ -19,33 +19,108 @@ public class GameGrid implements SharedConstants {
         grid[index] = id;
     }
     
-    public int getGridSize() {
-        return grid.length;
+    @Override
+    public GameGrid clone() {
+        GameGrid gameGrid = new GameGrid();
+        
+        for(int i = 0; i < grid.length; i++)
+            gameGrid.setMark(i, grid[i]);
+        
+        return gameGrid;        
     }
     
-    public int getType(int index) {
-        if(index < 0 || index >= grid.length)
-            return INVALID_INDEX;
-        
+    public int getMark(int index) {
         return grid[index];
     }
     
+    public int getGridSize() {
+        return grid.length;
+    }
+        
     public void clear() {
         for(int i = 0; i < grid.length; i++) {
-            grid[i] = BOARD_EMPTY;
+            grid[i] = PLAYER_EMPTY;
             
             for(IGGListener listener : listeners)
-                listener.updateMove(i, BOARD_EMPTY);
+                listener.updateMove(i, PLAYER_EMPTY);
         }
     }
     
-    public int getResult() {
-        int result1 = getResult(BOARD_PLAYER_1);
-        int result2 = getResult(BOARD_PLAYER_2);
+    public List<Integer> getLegalMoves() {
+        List<Integer> list = new ArrayList();
         
-        if(result1 == BOARD_PLAYER_1)
+        for(int i = 0; i < grid.length; i++)
+            if(grid[i] == PLAYER_EMPTY)
+                list.add(i);
+        
+        return list;
+    }
+    
+    public boolean isWinningMove(int index, int id) {
+        if(index < 0 || index >= grid.length)
+            return false;
+        
+        boolean result = false;
+        int oldID = grid[index];
+        grid[index] = id;
+        
+        switch(index) {
+            case 0: 
+                result = (grid[0] == id && grid[1] == id && grid[2] == id) ||
+                         (grid[0] == id && grid[3] == id && grid[6] == id) ||
+                         (grid[0] == id && grid[4] == id && grid[8] == id);
+                break;
+            case 1:
+                result = (grid[0] == id && grid[1] == id && grid[2] == id) ||
+                         (grid[1] == id && grid[4] == id && grid[7] == id);
+                break;
+            case 2:
+                result = (grid[0] == id && grid[1] == id && grid[2] == id) ||
+                         (grid[2] == id && grid[5] == id && grid[8] == id) ||
+                         (grid[2] == id && grid[4] == id && grid[6] == id);
+                break;
+            case 3:
+                result = (grid[3] == id && grid[4] == id && grid[5] == id) ||
+                         (grid[0] == id && grid[3] == id && grid[6] == id);
+                break;
+            case 4:
+                result = (grid[1] == id && grid[4] == id && grid[7] == id) ||
+                         (grid[3] == id && grid[4] == id && grid[5] == id) ||
+                         (grid[0] == id && grid[4] == id && grid[8] == id) ||
+                         (grid[2] == id && grid[4] == id && grid[6] == id);
+                break;
+            case 5:
+                result = (grid[3] == id && grid[4] == id && grid[5] == id) ||
+                         (grid[2] == id && grid[5] == id && grid[8] == id);
+                break;
+            case 6:
+                result = (grid[6] == id && grid[7] == id && grid[8] == id) ||
+                         (grid[0] == id && grid[3] == id && grid[6] == id) ||
+                         (grid[6] == id && grid[4] == id && grid[2] == id);
+                break;
+            case 7:
+                result = (grid[1] == id && grid[4] == id && grid[7] == id) ||
+                         (grid[6] == id && grid[7] == id && grid[8] == id);
+                break;
+            case 8:
+                result = (grid[2] == id && grid[5] == id && grid[8] == id) ||
+                         (grid[6] == id && grid[7] == id && grid[8] == id) ||
+                         (grid[8] == id && grid[4] == id && grid[0] == id); 
+                break;
+        }
+        
+        grid[index] = oldID;
+        
+        return result;
+    }
+    
+    public int getResult() {
+        int result1 = getResult(PLAYER_1);
+        int result2 = getResult(PLAYER_2);
+        
+        if(result1 == PLAYER_1)
             return RESULT_PLAYER_1_WON;
-        if(result2 == BOARD_PLAYER_2)
+        if(result2 == PLAYER_2)
             return RESULT_PLAYER_2_WON;
         if(isFull())
             return RESULT_DRAW;
@@ -53,23 +128,23 @@ public class GameGrid implements SharedConstants {
         return RESULT_NO_OUTCOME;
     }
     
-    private int getResult(int player) {
-        if((grid[0] == player && grid[3] == player && grid[6] == player) || 
-           (grid[1] == player && grid[4] == player && grid[7] == player) ||
-           (grid[2] == player && grid[5] == player && grid[8] == player) ||
-           (grid[0] == player && grid[1] == player && grid[2] == player) ||
-           (grid[3] == player && grid[4] == player && grid[5] == player) ||
-           (grid[6] == player && grid[7] == player && grid[8] == player) ||
-           (grid[0] == player && grid[4] == player && grid[8] == player) ||
-           (grid[2] == player && grid[4] == player && grid[6] == player))
-            return player;
+    private int getResult(int id) {
+        if((grid[0] == id && grid[3] == id && grid[6] == id) || 
+           (grid[1] == id && grid[4] == id && grid[7] == id) ||
+           (grid[2] == id && grid[5] == id && grid[8] == id) ||
+           (grid[0] == id && grid[1] == id && grid[2] == id) ||
+           (grid[3] == id && grid[4] == id && grid[5] == id) ||
+           (grid[6] == id && grid[7] == id && grid[8] == id) ||
+           (grid[0] == id && grid[4] == id && grid[8] == id) ||
+           (grid[2] == id && grid[4] == id && grid[6] == id))
+            return id;
         
         return RESULT_NO_OUTCOME;
     }
     
     private boolean isFull() {
         for(int i = 0; i < grid.length; i++)
-            if(grid[i] == BOARD_EMPTY)
+            if(grid[i] == PLAYER_EMPTY)
                 return false;
         
         return true;

@@ -29,10 +29,14 @@ public class SetupGameDialog extends JDialog {
         setLayout(new BorderLayout());
         
         player1TypeComboBox.addItem("Human");
-        player1TypeComboBox.addItem("Computer");
+        player1TypeComboBox.addItem("Easy Computer");
+        player1TypeComboBox.addItem("Normal Computer");
+        player1TypeComboBox.addItem("Hard Computer");
         player2TypeComboBox.addItem("Human");
-        player2TypeComboBox.addItem("Computer");
-        player2TypeComboBox.setSelectedIndex(1);
+        player2TypeComboBox.addItem("Easy Computer");
+        player2TypeComboBox.addItem("Normal Computer");
+        player2TypeComboBox.addItem("Hard Computer");
+        player2TypeComboBox.setSelectedIndex(3);
         
         okButton.addActionListener(new ButtonOKListener());
         cancelButton.addActionListener(new ButtonCancelListener());
