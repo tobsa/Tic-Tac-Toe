@@ -20,10 +20,10 @@ public class ServerAcceptFrame extends JFrame implements SharedConstants {
         setLayout(new BorderLayout());
         
         JButton button = new JButton("Abort");
-        button.addActionListener(new ButtonOKListener());
+        button.addActionListener(new ButtonAbortListener());
         
         JPanel panel1 = new JPanel();
-        panel1.add(new JLabel("Waiting for a client to connect!"));
+        panel1.add(new JLabel("Waiting for a client to connect..."));
         panel1.setBorder(new EmptyBorder(10, 10, 10, 10));
         
         JPanel panel2 = new JPanel();
@@ -35,13 +35,13 @@ public class ServerAcceptFrame extends JFrame implements SharedConstants {
         
         pack();
         
-        setTitle("Game Result");
+        setTitle("Waiting for clients...");
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
     
-    private class ButtonOKListener implements ActionListener {
+    private class ButtonAbortListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
             networkManager.closeConnection();
