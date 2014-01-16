@@ -14,7 +14,9 @@ public class ComputerHard extends Player implements SharedConstants {
     }
      
     @Override
-    public int computeMove() throws InterruptedException {        
+    public int computeMove() throws InterruptedException {    
+        Thread.sleep(500);
+        
         return minimaxDecision(gameGrid.clone());
     }
     
