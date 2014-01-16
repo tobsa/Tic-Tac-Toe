@@ -28,8 +28,7 @@ public class GameManager implements SharedConstants, Runnable {
                 player1 = new Human(PLAYER_1, name);
                 break;
             case TYPE_COMPUTER_EASY:
-                player1 = new ComputerEasy(PLAYER_1, name);
-                gameGrid.registerListener((ComputerEasy)player1);
+                player1 = new ComputerEasy(PLAYER_1, name, gameGrid);
                 break;
             case TYPE_COMPUTER_NORMAL:
                 player1 = new ComputerNormal(PLAYER_1, name, gameGrid);
@@ -46,8 +45,7 @@ public class GameManager implements SharedConstants, Runnable {
                 player2 = new Human(PLAYER_2, name);
                 break;
             case TYPE_COMPUTER_EASY:
-                player2 = new ComputerEasy(PLAYER_2, name);
-                gameGrid.registerListener((ComputerEasy)player2);
+                player2 = new ComputerEasy(PLAYER_2, name, gameGrid);
                 break;
             case TYPE_COMPUTER_NORMAL:
                 player2 = new ComputerNormal(PLAYER_2, name, gameGrid);
