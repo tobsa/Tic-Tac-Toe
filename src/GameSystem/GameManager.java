@@ -107,7 +107,7 @@ public class GameManager implements SharedConstants, Runnable {
 
             BlockQueue.getInstance().clear();
 
-            if(!gameGrid.setMark(player.computeMove(), player.getID()))
+            if(!gameGrid.setID(player.computeMove(), player.getID()))
                 continue;
 
             int result = gameGrid.getResult();        

@@ -14,26 +14,26 @@ public class ComputerHard extends Player implements SharedConstants {
     }
      
     @Override
-    public int computeMove() throws InterruptedException {
+    public int computeMove() throws InterruptedException {        
         return minimaxDecision(gameGrid.clone());
     }
     
-    private int minimaxDecision(GameGrid grid) {        
-        int maximum = Integer.MIN_VALUE;
-        int action = -1;
+    private int minimaxDecision(GameGrid grid) {               
+        int bestValue = Integer.MIN_VALUE;
+        int bestMove = -1;
         
         for(int move : grid.getLegalMoves()) {
-            int oldID = grid.getMark(move);
-            grid.setMark(move, getID());
+            int oldID = grid.getID(move);
+            grid.replaceID(move, getID());
             int value = minValue(grid);
-            if(value > maximum) {
-                maximum = value;
-                action = move;
+            if(value > bestValue) {
+                bestValue = value;
+                bestMove = move;
             }
-            grid.setMark(move, oldID);
+            grid.replaceID(move, oldID);
         }
         
-        return action;
+        return bestMove;
     }
         
     private int maxValue(GameGrid grid) {
@@ -44,10 +44,10 @@ public class ComputerHard extends Player implements SharedConstants {
         int v = Integer.MIN_VALUE;
         
         for(int move : grid.getLegalMoves()) {
-            int oldID = grid.getMark(move);
-            grid.setMark(move, getID());
+            int oldID = grid.getID(move);
+            grid.replaceID(move, getID());
             v = Math.max(v, minValue(grid));
-            grid.setMark(move, oldID);
+            grid.replaceID(move, oldID);
         }
         
         return v;
@@ -61,10 +61,10 @@ public class ComputerHard extends Player implements SharedConstants {
         int v = Integer.MAX_VALUE;
         
         for(int move : grid.getLegalMoves()) {
-            int oldID = grid.getMark(move);
-            grid.setMark(move, getID());
+            int oldID = grid.getID(move);
+            grid.replaceID(move, getID() == PLAYER_1 ? PLAYER_2 : PLAYER_1);
             v = Math.min(v, maxValue(grid));
-            grid.setMark(move, oldID);
+            grid.replaceID(move, oldID);
         }
         
         return v;
@@ -78,10 +78,10 @@ public class ComputerHard extends Player implements SharedConstants {
     
     private int utility(int result) {        
         if(result == RESULT_PLAYER_1_WON)
-            return UTILITY_LOSE;
+            return getID() == PLAYER_1 ? UTILITY_WIN : UTILITY_LOSE;
         else if(result == RESULT_PLAYER_2_WON)
-            return UTILITY_WIN;
+            return getID() == PLAYER_2 ? UTILITY_WIN : UTILITY_LOSE;
         else
             return UTILITY_DRAW;
-    }            
+    }
 }
